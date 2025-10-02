@@ -1,0 +1,7 @@
+{
+  "name": "Arnold Jourdan - AI Designer Toolkit",
+  "description": "An AI-powered toolkit for graphic designer Arnold Jourdan, featuring tools for creative generation, workflow optimization, advanced editing, and design analysis.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
