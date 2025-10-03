@@ -1,22 +1,19 @@
 {
-  "name": "arnold-jourdan---ai-designer-toolkit",
+  "name": "ai-designer-toolkit",
+  "version": "1.0.0",
+  "description": "An AI-powered toolkit for graphic designer Arnold Jourdan.",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "echo 'No dev script configured. Open index.html in a browser.'",
+    "build": "echo 'No build step required for static files.'",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
-    "@google/genai": "1.21.0"
+    "@google/genai": "^1.21.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "@types/react": "^18.0.0",
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.0.0"
   }
 }
