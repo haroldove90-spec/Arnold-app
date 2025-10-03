@@ -1,9 +1,7 @@
-
 import React, { useState, useCallback } from 'react';
 import { generateStructuredText } from '../../services/geminiService';
 import type { Tool } from '../../types';
 import Spinner from '../ui/Spinner';
-import { Type } from '@google/genai';
 
 interface TrendAnalysisProps {
     tool: Tool;
@@ -27,19 +25,19 @@ const TrendAnalysis: React.FC<TrendAnalysisProps> = ({ tool, onBack }) => {
         try {
             const prompt = `As a design trend analyst, describe the current visual trends for the '${market}' target audience. Include popular color palettes (with hex codes), typography styles, imagery, and overall mood. Provide 3 concrete visual concepts.`;
             const schema = {
-                type: Type.OBJECT,
+                type: 'OBJECT',
                 properties: {
-                    summary: { type: Type.STRING, description: "Overall mood and trend summary." },
-                    colorPalettes: { type: Type.ARRAY, items: { type: Type.STRING, description: "e.g., 'Vibrant Gradients: #FF00FF, #00FFFF'" }},
-                    typography: { type: Type.ARRAY, items: { type: Type.STRING, description: "e.g., 'Bold Serifs: Playfair Display'" } },
-                    imageryStyle: { type: Type.STRING },
+                    summary: { type: 'STRING', description: "Overall mood and trend summary." },
+                    colorPalettes: { type: 'ARRAY', items: { type: 'STRING', description: "e.g., 'Vibrant Gradients: #FF00FF, #00FFFF'" }},
+                    typography: { type: 'ARRAY', items: { type: 'STRING', description: "e.g., 'Bold Serifs: Playfair Display'" } },
+                    imageryStyle: { type: 'STRING' },
                     concepts: {
-                        type: Type.ARRAY,
+                        type: 'ARRAY',
                         items: {
-                            type: Type.OBJECT,
+                            type: 'OBJECT',
                             properties: {
-                                name: { type: Type.STRING },
-                                description: { type: Type.STRING }
+                                name: { type: 'STRING' },
+                                description: { type: 'STRING' }
                             },
                              required: ["name", "description"]
                         }

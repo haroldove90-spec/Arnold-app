@@ -20,15 +20,28 @@ import PhotoRestoration from './components/tools/PhotoRestoration';
 import TrendAnalysis from './components/tools/TrendAnalysis';
 import ABTesting from './components/tools/ABTesting';
 import SocialMediaOptimization from './components/tools/SocialMediaOptimization';
+import PlagiarismDetection from './components/tools/PlagiarismDetection';
 import AutomatedCritique from './components/tools/AutomatedCritique';
 import ImprovementSuggestions from './components/tools/ImprovementSuggestions';
 import ErrorDetection from './components/tools/ErrorDetection';
 import AutoStyleGuides from './components/tools/AutoStyleGuides';
+import PresentationScriptGenerator from './components/tools/PresentationScriptGenerator';
 import LogoDesign from './components/tools/LogoDesign';
 import WebUIDesign from './components/tools/WebUIDesign';
 import PackagingDesign from './components/tools/PackagingDesign';
 import Typography from './components/tools/Typography';
 import AIVectorizer from './components/tools/AIVectorizer';
+import ProductPhotography from './components/tools/ProductPhotography';
+import BrandNameGenerator from './components/tools/BrandNameGenerator';
+import SemanticSearch from './components/tools/SemanticSearch';
+import TaskAutomation from './components/tools/TaskAutomation';
+import VoiceToDesign from './components/tools/VoiceToDesign';
+import BrandIdentityKit from './components/tools/BrandIdentityKit';
+import MoodBoardGenerator from './components/tools/MoodBoardGenerator';
+import LiveDesignSession from './components/tools/LiveDesignSession';
+import VideoStoryboardGenerator from './components/tools/VideoStoryboardGenerator';
+import SlideshowGenerator from './components/tools/SlideshowGenerator';
+import ConversationalAssistant from './components/tools/ConversationalAssistant';
 
 
 const App: React.FC = () => {
@@ -59,13 +72,20 @@ const App: React.FC = () => {
         switch (activeTool.id) {
             // Creative Assistance
             case 'design-from-prompt': return <ImageGenerator {...toolProps} />;
+            case 'live-design-session': return <LiveDesignSession {...toolProps} />;
+            case 'voice-to-design': return <VoiceToDesign {...toolProps} />;
             case 'smart-color-palettes': return <ColorPaletteGenerator {...toolProps} />;
             case 'visual-brainstorming': return <VisualBrainstorming {...toolProps} />;
             case 'auto-mockups': return <AutoMockups {...toolProps} />;
+            case 'brand-name-generator': return <BrandNameGenerator {...toolProps} />;
+            case 'mood-board-generator': return <MoodBoardGenerator {...toolProps} />;
+            case 'video-storyboard-generator': return <VideoStoryboardGenerator {...toolProps} />;
             
             // Workflow
             case 'auto-tagging': return <AutoTagging {...toolProps} />;
             case 'color-compatibility': return <ColorCompatibility {...toolProps} />;
+            case 'semantic-search': return <SemanticSearch {...toolProps} />;
+            case 'task-automation': return <TaskAutomation {...toolProps} />;
 
             // Advanced Editing
             case 'bg-removal': return <BgRemoval {...toolProps} />;
@@ -73,20 +93,26 @@ const App: React.FC = () => {
             case 'resolution-upscaling': return <ResolutionUpscaling {...toolProps} />;
             case 'photo-restoration': return <PhotoRestoration {...toolProps} />;
             case 'ai-vectorizer': return <AIVectorizer {...toolProps} />;
+            case 'product-photography': return <ProductPhotography {...toolProps} />;
             
             // Analysis & Optimization
             case 'trend-analysis': return <TrendAnalysis {...toolProps} />;
             case 'ab-testing': return <ABTesting {...toolProps} />;
+            case 'plagiarism-detection': return <PlagiarismDetection {...toolProps} />;
             case 'social-media-optimization': return <SocialMediaOptimization {...toolProps} />;
 
             // Design Assistant
+            case 'conversational-assistant': return <ConversationalAssistant {...toolProps} />;
             case 'automated-critique': return <AutomatedCritique {...toolProps} />;
             case 'improvement-suggestions': return <ImprovementSuggestions {...toolProps} />;
             case 'error-detection': return <ErrorDetection {...toolProps} />;
             case 'auto-style-guides': return <AutoStyleGuides {...toolProps} />;
+            case 'presentation-script-generator': return <PresentationScriptGenerator {...toolProps} />;
+            case 'slideshow-generator': return <SlideshowGenerator {...toolProps} />;
 
             // Project Specific
             case 'logo-design': return <LogoDesign {...toolProps} />;
+            case 'brand-identity-kit': return <BrandIdentityKit {...toolProps} />;
             case 'web-ui-design': return <WebUIDesign {...toolProps} />;
             case 'packaging-design': return <PackagingDesign {...toolProps} />;
             case 'typography': return <Typography {...toolProps} />;

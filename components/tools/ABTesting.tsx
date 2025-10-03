@@ -1,9 +1,7 @@
-
 import React, { useState, useCallback } from 'react';
 import { generateStructuredText } from '../../services/geminiService';
 import type { Tool } from '../../types';
 import Spinner from '../ui/Spinner';
-import { Type } from '@google/genai';
 
 interface ABTestingProps {
     tool: Tool;
@@ -29,16 +27,16 @@ const ABTesting: React.FC<ABTestingProps> = ({ tool, onBack }) => {
         try {
             const prompt = `Generate 3 variations of ad copy for the following product: '${product}'. The target audience is '${audience}' and the goal is '${goal}'. For each variation, provide a headline and a body text. Also, give a brief rationale for why each variation might be effective.`;
             const schema = {
-                type: Type.OBJECT,
+                type: 'OBJECT',
                 properties: {
                     variations: {
-                        type: Type.ARRAY,
+                        type: 'ARRAY',
                         items: {
-                            type: Type.OBJECT,
+                            type: 'OBJECT',
                             properties: {
-                                headline: { type: Type.STRING },
-                                body: { type: Type.STRING },
-                                rationale: { type: Type.STRING }
+                                headline: { type: 'STRING' },
+                                body: { type: 'STRING' },
+                                rationale: { type: 'STRING' }
                             },
                             required: ["headline", "body", "rationale"]
                         }

@@ -14,8 +14,8 @@ const PlaceholderTool: React.FC<PlaceholderToolProps> = ({ tool, onBack }) => {
             
             <div className="bg-gray-800/50 p-8 rounded-lg">
                 <div className="text-purple-400 inline-block mb-4">
-                    {/* Fix: To resolve the overload error, cast `tool.icon` to `React.ReactElement<any>` which allows passing new props like `className` via cloneElement. */}
-                    {React.isValidElement(tool.icon) ? React.cloneElement(tool.icon as React.ReactElement<any>, { className: "h-12 w-12" }) : tool.icon}
+                    {/* The icon type is now React.ReactElement, so we can safely clone it to apply new props. */}
+                    {React.isValidElement(tool.icon) ? React.cloneElement(tool.icon, { className: "h-12 w-12" }) : tool.icon}
                 </div>
                 <h2 className="text-3xl font-bold">{tool.title}</h2>
                 <p className="text-gray-400 mt-2 mb-6">{tool.description}</p>

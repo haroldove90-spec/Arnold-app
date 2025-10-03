@@ -1,4 +1,4 @@
-// FIX: Import React to use the React.ReactNode type for the tool icon.
+// FIX: Import React to use the React.ReactElement type for the tool icon.
 import React from 'react';
 
 // Using a const object instead of an enum for better JS interoperability,
@@ -21,6 +21,6 @@ export interface Tool {
     title: string;
     description: string;
     category: ToolCategoryValue; // Use the value type
-    icon: React.ReactNode;
+    icon: React.ReactElement;
     isImplemented?: boolean;
 }

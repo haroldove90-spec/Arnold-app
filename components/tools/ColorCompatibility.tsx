@@ -1,9 +1,7 @@
-
 import React, { useState, useCallback } from 'react';
 import { generateStructuredText } from '../../services/geminiService';
 import type { Tool } from '../../types';
 import Spinner from '../ui/Spinner';
-import { Type } from '@google/genai';
 
 interface ColorCompatibilityProps {
     tool: Tool;
@@ -33,14 +31,14 @@ const ColorCompatibility: React.FC<ColorCompatibilityProps> = ({ tool, onBack })
         try {
             const prompt = `Analyze the color contrast between foreground color ${color1} and background color ${color2}. Is it compliant with WCAG AA and AAA standards for normal and large text? Provide the contrast ratio and a brief explanation.`;
             const schema = {
-                type: Type.OBJECT,
+                type: 'OBJECT',
                 properties: {
-                    ratio: { type: Type.NUMBER, description: "The contrast ratio." },
-                    aa_normal: { type: Type.BOOLEAN, description: "Passes WCAG AA for normal text." },
-                    aaa_normal: { type: Type.BOOLEAN, description: "Passes WCAG AAA for normal text." },
-                    aa_large: { type: Type.BOOLEAN, description: "Passes WCAG AA for large text." },
-                    aaa_large: { type: Type.BOOLEAN, description: "Passes WCAG AAA for large text." },
-                    feedback: { type: Type.STRING, description: "A brief summary of the results." }
+                    ratio: { type: 'NUMBER', description: "The contrast ratio." },
+                    aa_normal: { type: 'BOOLEAN', description: "Passes WCAG AA for normal text." },
+                    aaa_normal: { type: 'BOOLEAN', description: "Passes WCAG AAA for normal text." },
+                    aa_large: { type: 'BOOLEAN', description: "Passes WCAG AA for large text." },
+                    aaa_large: { type: 'BOOLEAN', description: "Passes WCAG AAA for large text." },
+                    feedback: { type: 'STRING', description: "A brief summary of the results." }
                 },
                 required: ["ratio", "aa_normal", "aaa_normal", "aa_large", "aaa_large", "feedback"]
             };

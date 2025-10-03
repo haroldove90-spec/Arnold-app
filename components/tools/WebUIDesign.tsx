@@ -1,9 +1,7 @@
-
 import React, { useState, useCallback } from 'react';
 import { generateStructuredText } from '../../services/geminiService';
 import type { Tool } from '../../types';
 import Spinner from '../ui/Spinner';
-import { Type } from '@google/genai';
 
 interface WebUIDesignProps {
     tool: Tool;
@@ -28,17 +26,17 @@ const WebUIDesign: React.FC<WebUIDesignProps> = ({ tool, onBack }) => {
         try {
             const prompt = `Provide a layout suggestion for a '${pageType}' webpage for a '${business}'. Describe the key sections (e.g., Hero, Features, Testimonials, CTA) and the components within each. Suggest a visual style. Do not generate code, but a structured description.`;
             const schema = {
-                type: Type.OBJECT,
+                type: 'OBJECT',
                 properties: {
-                    visualStyle: { type: Type.STRING },
+                    visualStyle: { type: 'STRING' },
                     sections: {
-                        type: Type.ARRAY,
+                        type: 'ARRAY',
                         items: {
-                            type: Type.OBJECT,
+                            type: 'OBJECT',
                             properties: {
-                                name: { type: Type.STRING },
-                                description: { type: Type.STRING },
-                                components: { type: Type.ARRAY, items: { type: Type.STRING } }
+                                name: { type: 'STRING' },
+                                description: { type: 'STRING' },
+                                components: { type: 'ARRAY', items: { type: 'STRING' } }
                             },
                              required: ["name", "description", "components"]
                         }

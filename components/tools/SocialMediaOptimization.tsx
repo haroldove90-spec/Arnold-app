@@ -1,9 +1,7 @@
-
 import React, { useState, useCallback } from 'react';
 import { generateStructuredText } from '../../services/geminiService';
 import type { Tool } from '../../types';
 import Spinner from '../ui/Spinner';
-import { Type } from '@google/genai';
 
 interface SocialMediaOptimizationProps {
     tool: Tool;
@@ -28,13 +26,13 @@ const SocialMediaOptimization: React.FC<SocialMediaOptimizationProps> = ({ tool,
         try {
             const prompt = `Provide the ideal image/video specifications and best practices for a '${platform}'. Include tips for maximizing engagement.`;
             const schema = {
-                type: Type.OBJECT,
+                type: 'OBJECT',
                 properties: {
-                    platform: { type: Type.STRING },
-                    dimensions: { type: Type.STRING, description: "e.g., 1080x1080 pixels" },
-                    aspectRatio: { type: Type.STRING, description: "e.g., 1:1" },
-                    formats: { type: Type.ARRAY, items: { type: Type.STRING }},
-                    bestPractices: { type: Type.ARRAY, items: { type: Type.STRING }}
+                    platform: { type: 'STRING' },
+                    dimensions: { type: 'STRING', description: "e.g., 1080x1080 pixels" },
+                    aspectRatio: { type: 'STRING', description: "e.g., 1:1" },
+                    formats: { type: 'ARRAY', items: { type: 'STRING' }},
+                    bestPractices: { type: 'ARRAY', items: { type: 'STRING' }}
                 },
                 required: ["platform", "dimensions", "aspectRatio", "formats", "bestPractices"]
             };

@@ -1,5 +1,3 @@
-import { Type } from "@google/genai";
-
 // Convierte un objeto File a un formato serializable (Base64) para enviarlo en el cuerpo de una petición JSON.
 async function fileToSerializable(file: File): Promise<{ data: string; mimeType: string }> {
     return new Promise((resolve, reject) => {
@@ -43,8 +41,12 @@ async function callApi<T>(action: string, payload: object): Promise<T> {
 
 // Las funciones de servicio ahora son simples y limpias, delegando la lógica a nuestro manejador de API.
 
-export const generateImage = (prompt: string, numberOfImages: number = 1): Promise<string[]> => {
-    return callApi('generateImage', { prompt, numberOfImages });
+export const generateImage = (prompt: string, numberOfImages: number = 2, aspectRatio: string = '1:1'): Promise<string[]> => {
+    return callApi('generateImage', { prompt, numberOfImages, aspectRatio });
+};
+
+export const generateStoryboard = (sceneDescription: string): Promise<string[]> => {
+    return callApi('generateStoryboard', { sceneDescription });
 };
 
 export const generateStructuredText = (prompt: string, responseSchema: any): Promise<any> => {
@@ -53,6 +55,20 @@ export const generateStructuredText = (prompt: string, responseSchema: any): Pro
 
 export const generateText = (prompt: string): Promise<string> => {
     return callApi('generateText', { prompt });
+};
+
+export const generateDetailedBrief = (userPrompt: string): Promise<string> => {
+    const prompt = `Act as a creative director. A designer has given you this initial idea: "${userPrompt}". 
+    Expand this into a detailed creative brief for an image generation AI. 
+    The brief should be a single block of text, starting with the original idea and then expanding on it. 
+    Include details about:
+    - A specific visual style (e.g., minimalist vector art, photorealistic, cinematic).
+    - A color palette.
+    - The mood and atmosphere.
+    - The composition and subject placement.
+    - Key elements to include.
+    Make the final text a rich, descriptive paragraph that will guide the AI to create a high-quality, specific image.`;
+    return generateText(prompt);
 };
 
 export const generateTextWithImage = async (prompt: string, image: File, isJson: boolean = false): Promise<any> => {
@@ -65,6 +81,68 @@ export const editImage = async (prompt: string, image: File): Promise<{ text: st
     return callApi('editImage', { prompt, image: serializableImage });
 };
 
+export const analyzeOriginality = async (prompt: string, image: File): Promise<any> => {
+    const serializableImage = await fileToSerializable(image);
+    return callApi('analyzeOriginality', { prompt, image: serializableImage });
+};
+
+export interface Message {
+    role: 'user' | 'model';
+    text: string;
+}
+
+export const continueConversation = (history: Message[], newMessage: string): Promise<{ text: string }> => {
+    return callApi('continueConversation', { history, newMessage });
+};
+
+export interface KitData {
+    colors: {
+        primary: string[];
+        secondary: string[];
+    };
+    typography: {
+        headlineFont: string;
+        bodyFont: string;
+        reason: string;
+    };
+    styleKeywords: string[];
+    mockups: string[];
+}
+
+export const generateBrandKit = async (image: File): Promise<KitData> => {
+    const serializableImage = await fileToSerializable(image);
+    return callApi('generateBrandKit', { image: serializableImage });
+};
+
+export interface MoodBoardData {
+    images: string[];
+    colors: string[];
+}
+
+export const generateMoodBoard = (theme: string): Promise<MoodBoardData> => {
+    return callApi('generateMoodBoard', { theme });
+};
+
+export interface Slide {
+    type: 'title' | 'image_left' | 'image_right' | 'full_image' | 'bullet_points' | 'end';
+    title?: string;
+    subtitle?: string;
+    text?: string;
+    image_index?: number;
+    caption?: string;
+    points?: string[];
+}
+
+export interface SlideshowData {
+    slides: Slide[];
+}
+
+export const generateSlideshow = async (images: File[], title: string, points: string): Promise<SlideshowData> => {
+    const serializableImages = await Promise.all(images.map(fileToSerializable));
+    return callApi('generateSlideshow', { images: serializableImages, title, points });
+};
+
+
 // --- Tipos y funciones específicas que usan los servicios anteriores ---
 
 export interface Color {
@@ -75,16 +153,16 @@ export interface Color {
 export const generateColorPalette = async (theme: string): Promise<Color[]> => {
     const prompt = `Generate a color palette with 5 colors for the theme: ${theme}. Provide creative names for each color.`;
     const schema = {
-        type: Type.OBJECT,
+        type: 'OBJECT',
         properties: {
             palette: {
-                type: Type.ARRAY,
+                type: 'ARRAY',
                 description: 'An array of 5 color objects.',
                 items: {
-                    type: Type.OBJECT,
+                    type: 'OBJECT',
                     properties: {
-                        name: { type: Type.STRING, description: 'The creative name of the color.' },
-                        hex: { type: Type.STRING, description: 'The hex code for the color (e.g., #RRGGBB).' },
+                        name: { type: 'STRING', description: 'The creative name of the color.' },
+                        hex: { type: 'STRING', description: 'The hex code for the color (e.g., #RRGGBB).' },
                     },
                     required: ["name", "hex"]
                 },

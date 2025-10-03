@@ -75,6 +75,8 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
     const [error, setError] = useState<string | null>(null);
     const [resultImage, setResultImage] = useState<string | null>(null);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const [lineColor, setLineColor] = useState('#000000');
+    const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -99,7 +101,7 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
         setError(null);
         setResultImage(null);
         try {
-            const prompt = "Analyze this image and create a clean, black and white line art vector trace of the main subject. The background should be completely white. The lines should be solid black and clearly defined.";
+            const prompt = `Analyze this image and create a clean line art vector trace of the main subject. The lines should be solid ${lineColor} and the background should be completely ${backgroundColor}.`;
             const response = await editImage(prompt, imageFile);
             setResultImage(response.image);
         } catch (err) {
@@ -107,7 +109,7 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [imageFile]);
+    }, [imageFile, lineColor, backgroundColor]);
     
     const handleExportPdf = () => {
         if (!resultImage) return;
@@ -115,7 +117,7 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
         printWindow?.document.write(`
             <html>
                 <head><title>Export</title></head>
-                <body style="margin: 0; text-align: center;">
+                <body style="margin: 0; text-align: center; background-color: ${backgroundColor};">
                     <img src="${resultImage}" style="max-width: 100%; height: auto;" />
                     <script>
                         setTimeout(() => { 
@@ -129,6 +131,16 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
         printWindow?.document.close();
     };
 
+    const handleDownloadPng = () => {
+        if (!resultImage) return;
+        const link = document.createElement('a');
+        link.href = resultImage;
+        link.download = `vectorized-result.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="max-w-4xl mx-auto">
             {isCameraOpen && <CameraView onCapture={processFile} onCancel={() => setIsCameraOpen(false)} />}
@@ -140,22 +152,32 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
 
             <div className="mt-6 mb-8 p-4 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <p className="text-sm text-gray-300">
-                    <span className="font-semibold text-purple-400">¿Cómo funciona?</span> Sube una foto de un dibujo, boceto o cualquier imagen, o toma una foto con tu cámara. La IA lo convertirá en un trazo de líneas limpias. Luego, puedes exportar el resultado a PDF.
+                    <span className="font-semibold text-purple-400">¿Cómo funciona?</span> Sube o captura una imagen, elige los colores de línea y fondo, y la IA lo convertirá en un trazo limpio. Luego, puedes descargar el resultado como PNG o exportarlo a PDF.
                 </p>
             </div>
 
-            <div className="bg-gray-800/50 p-6 rounded-lg text-center">
+            <div className="bg-gray-800/50 p-6 rounded-lg space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
-                     <label htmlFor="image-upload" className="w-full cursor-pointer bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                     <label htmlFor="image-upload" className="w-full text-center cursor-pointer bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
                         Subir Imagen
                      </label>
                      <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" disabled={isLoading} />
                      <button onClick={() => setIsCameraOpen(true)} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Tomar Foto</button>
                 </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                        <label htmlFor="line-color" className="block text-sm text-gray-400 mb-1 text-left">Color de Línea</label>
+                        <input id="line-color" type="color" value={lineColor} onChange={(e) => setLineColor(e.target.value)} className="w-full h-12 p-1 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer" disabled={isLoading} />
+                    </div>
+                    <div className="flex-1">
+                        <label htmlFor="bg-color" className="block text-sm text-gray-400 mb-1 text-left">Color de Fondo</label>
+                        <input id="bg-color" type="color" value={backgroundColor} onChange={(e) => setBackgroundColor(e.target.value)} className="w-full h-12 p-1 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer" disabled={isLoading} />
+                    </div>
+                </div>
                  <button
                     onClick={handleVectorize}
                     disabled={isLoading || !imageFile}
-                    className="mt-4 w-full flex justify-center items-center bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                    className="w-full flex justify-center items-center bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                 >
                     {isLoading && <Spinner />}
                     {isLoading ? 'Vectorizando...' : 'Vectorizar Imagen'}
@@ -173,7 +195,7 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
                 </div>
                  <div>
                     <h3 className="text-xl font-semibold mb-4 text-center">Vectorizado</h3>
-                     <div className="w-full aspect-square bg-white rounded-lg shadow-lg p-2">
+                     <div className="w-full aspect-square rounded-lg shadow-lg p-2" style={{backgroundImage: 'repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%)', backgroundSize: '16px 16px'}}>
                         {isLoading && <div className="w-full h-full flex items-center justify-center animate-pulse bg-gray-800/50 rounded-md"><p className="text-white">Procesando...</p></div>}
                         {resultImage && <img src={resultImage} alt="Vectorized result" className="w-full h-full object-contain" />}
                     </div>
@@ -181,7 +203,10 @@ const AIVectorizer: React.FC<AIVectorizerProps> = ({ tool, onBack }) => {
             </div>
             
              {resultImage && !isLoading && (
-                <div className="mt-8 text-center">
+                <div className="mt-8 text-center flex flex-col sm:flex-row justify-center gap-4">
+                    <button onClick={handleDownloadPng} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                        Descargar PNG
+                    </button>
                     <button onClick={handleExportPdf} className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg transition-colors">
                         Exportar a PDF
                     </button>
